@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 
 interface Bundle {
@@ -62,6 +63,7 @@ function BundleCard({
   bundle: Bundle;
   initialBalance: number;
 }) {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [toast, setToast] = useState<{
     type: "success" | "error";
@@ -119,6 +121,7 @@ function BundleCard({
           type: "success",
           message: `${bundle.name} redeemed successfully!`,
         });
+        router.refresh();
       } catch {
         setToast({
           type: "error",

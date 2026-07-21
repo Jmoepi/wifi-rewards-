@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 interface BalanceAdminProps {
@@ -7,6 +8,7 @@ interface BalanceAdminProps {
 }
 
 export function BalanceAdmin({ currentBalance }: BalanceAdminProps) {
+  const router = useRouter();
   const [balance, setBalance] = useState(currentBalance);
   const [inputValue, setInputValue] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -46,6 +48,7 @@ export function BalanceAdmin({ currentBalance }: BalanceAdminProps) {
         setBalance(updated.sbBalance);
         setInputValue("");
         setToast({ type: "success", message: "Balance updated successfully." });
+        router.refresh();
       } catch {
         setToast({ type: "error", message: "An unexpected error occurred." });
       }
