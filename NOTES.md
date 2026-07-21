@@ -54,11 +54,7 @@ This split minimizes JavaScript sent to the client while keeping interactive ele
 
 ## 5. Improvements
 
-If given another day:
-- **Automated Testing**: Playwright E2E tests covering the full auth + redemption lifecycle
-- **Optimistic UI**: Use React 19's `useOptimistic` hook so balance changes reflect instantly before server confirmation
-- **Rate Limiting**: Add rate limiting on auth endpoints to prevent brute-force attacks
-- **Pagination**: Add paginated table controls and date/bundle filtering on the Transaction History page
-- **Error Boundaries**: React Error Boundaries for graceful failure handling in client components
-- **CSRF Protection**: Add CSRF tokens to state-changing operations
-- **Input Sanitization**: Additional server-side sanitization beyond Zod validation
+If given another day I would add the following:
+
+- **Rate Limiting**: rate limiting on auth endpoints to prevent brute-force attacks
+- **Pagination**:  paginated table controls and date/bundle filtering on the Transaction History page
