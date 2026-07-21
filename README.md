@@ -10,7 +10,7 @@ npm install
 
 ## Environment Variables
 
-Copy `.env.example` to `.env` and configure:
+Copy to your `.env` and configure:
 
 ```bash
 DATABASE_URL="file:./dev.db"
