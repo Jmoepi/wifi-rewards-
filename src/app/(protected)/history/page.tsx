@@ -24,8 +24,8 @@ export default async function HistoryPage() {
           No transactions yet. Redeem a bundle to get started.
         </p>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
-          <table className="w-full text-left text-sm">
+        <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm">
+          <table className="w-full min-w-[480px] text-left text-sm">
             <thead className="border-b border-gray-200 bg-gray-50">
               <tr>
                 <th className="px-4 py-3 font-medium text-gray-600">
@@ -42,7 +42,7 @@ export default async function HistoryPage() {
                 <tr key={tx.id}>
                   <td className="px-4 py-3">{tx.bundleName}</td>
                   <td className="px-4 py-3">{tx.cost} SB</td>
-                  <td className="px-4 py-3 text-gray-500">
+                  <td className="whitespace-nowrap px-4 py-3 text-gray-500">
                     {new Date(tx.createdAt).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "short",

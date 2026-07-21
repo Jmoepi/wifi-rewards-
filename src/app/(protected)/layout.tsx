@@ -8,11 +8,11 @@ export default function ProtectedLayout({
   return (
     <div className="flex min-h-screen flex-col">
       <header className="border-b border-gray-200 bg-white">
-        <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
+        <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-2 px-4 py-3">
           <a href="/dashboard" className="text-lg font-bold">
             WiFi Rewards
           </a>
-          <div className="flex items-center gap-4">
+          <nav className="flex items-center gap-4">
             <a
               href="/dashboard"
               className="text-sm text-gray-600 hover:text-gray-900"
@@ -33,7 +33,7 @@ export default function ProtectedLayout({
                 Logout
               </button>
             </form>
-          </div>
+          </nav>
         </div>
       </header>
       <main className="mx-auto w-full max-w-4xl flex-1 p-4">{children}</main>

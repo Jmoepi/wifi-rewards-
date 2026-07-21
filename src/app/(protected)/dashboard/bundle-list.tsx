@@ -44,10 +44,10 @@ export function BundleList({ userBalance }: BundleListProps) {
   }
 
   return (
-    <div className="grid gap-4 sm:grid-cols-3">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {bundles.map((bundle) => (
         <BundleCard
-          key={bundle.id}
+          key={`${bundle.id}-${userBalance}`}
           bundle={bundle}
           initialBalance={userBalance}
         />

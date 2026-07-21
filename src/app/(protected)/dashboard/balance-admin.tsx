@@ -60,7 +60,7 @@ export function BalanceAdmin({ currentBalance }: BalanceAdminProps) {
       <h2 className="mb-3 text-sm font-semibold text-gray-700">
         Admin / Test Controls
       </h2>
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <label htmlFor="balance-input" className="text-sm text-gray-600">
           Set Balance:
         </label>

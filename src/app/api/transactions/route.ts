@@ -28,20 +28,23 @@ export async function POST(request: NextRequest) {
 
   const { bundleId, bundleName, cost } = validated.data;
 
+  const user = await prisma.user.findUnique({
+    where: { id: session.userId },
+    select: { sbBalance: true },
+  });
+
+  if (!user) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+
+  if (user.sbBalance < cost) {
+    return NextResponse.json(
+      { error: "Insufficient balance" },
+      { status: 400 }
+    );
+  }
+
   const result = await prisma.$transaction(async (tx) => {
-    const user = await tx.user.findUnique({
-      where: { id: session.userId },
-      select: { sbBalance: true },
-    });
-
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    if (user.sbBalance < cost) {
-      throw new Error("Insufficient balance");
-    }
-
     const updatedUser = await tx.user.update({
       where: { id: session.userId },
       data: { sbBalance: user.sbBalance - cost },
