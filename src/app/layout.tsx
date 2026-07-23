@@ -1,3 +1,16 @@
+/**
+ * Root layout — wraps every page in the application.
+ * This is a Server Component (no "use client") and runs on every route.
+ *
+ * Responsibilities:
+ * - Sets up Google Fonts (Geist Sans & Mono) via CSS variables
+ * - Configures page metadata (title, description) for SEO
+ * - Provides the HTML shell with Tailwind CSS base classes
+ *
+ * This layout does NOT include any auth logic — that's handled by proxy.ts
+ * and the (protected) layout group.
+ */
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";

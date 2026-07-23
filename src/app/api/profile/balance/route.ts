@@ -1,3 +1,14 @@
+/**
+ * PATCH /api/profile/balance — Sets the user's SB balance to a specific value.
+ *
+ * This is the Admin/Test Controls endpoint. Since users start with 0 SB and
+ * there is no "earn rewards" flow in this assessment, this endpoint allows
+ * testers to manually set a balance so they can test the redemption flow.
+ *
+ * It only affects the currently authenticated user's own balance.
+ * The balance is set absolutely (not incremented/decremented).
+ */
+
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
@@ -28,6 +39,7 @@ export async function PATCH(request: NextRequest) {
     );
   }
 
+  // Only updates the authenticated user's own balance — no admin role needed.
   const user = await prisma.user.update({
     where: { id: session.userId },
     data: { sbBalance: validated.data.balance },

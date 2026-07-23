@@ -1,3 +1,7 @@
+// Prisma schema for the WiFi Rewards platform.
+// Uses SQLite as a lightweight, zero-configuration database ideal for development.
+// The Prisma client is generated into src/generated/ for type-safe database access.
+
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -7,23 +11,29 @@ datasource db {
   provider = "sqlite"
 }
 
+// Represents a registered user on the platform.
+// Holds authentication credentials and their current SB (reward credits) balance.
+// A user starts with 0 SB and can earn/adjust balance via admin controls.
 model User {
   id           String        @id @default(uuid())
   name         String
-  email        String        @unique
-  passwordHash String
-  sbBalance    Int           @default(0)
+  email        String        @unique       // Ensures no duplicate registrations
+  passwordHash String                      // Bcrypt-hashed password (never stored in plaintext)
+  sbBalance    Int           @default(0)   // Virtual credits for redeeming WiFi bundles
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  transactions Transaction[]
+  transactions Transaction[]               // One-to-many: a user has many redemption records
 }
 
+// Records each successful WiFi bundle redemption.
+// Only created after the simulated WiFi provider API (/api/redeem) returns success.
+// Used to populate the Transaction History page.
 model Transaction {
   id         String   @id @default(uuid())
   userId     String
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  bundleId   Int
-  bundleName String
-  cost       Int
+  bundleId   Int                                // ID matching the bundle from /api/bundles
+  bundleName String                             // Denormalized bundle name for display without joins
+  cost       Int                                // SB cost deducted at time of redemption
   createdAt  DateTime @default(now())
 }

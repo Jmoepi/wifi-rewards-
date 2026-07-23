@@ -1,3 +1,19 @@
+/**
+ * BundleList — Client Component that fetches and displays available WiFi bundles.
+ *
+ * Why "use client"? This component needs:
+ * - `useEffect` to fetch bundles from /api/bundles on mount
+ * - `useState` for bundles, loading, and error states
+ * - Interactive BundleCard sub-components with redeem functionality
+ *
+ * Architecture:
+ * - The parent Server Component (dashboard/page.tsx) passes the user's
+ *   balance as a prop. This avoids a client-side API call just to get
+ *   the balance — it's already available from the server query.
+ * - Bundle data IS fetched client-side from /api/bundles because this
+ *   data is dynamic and independent of the user's session.
+ */
+
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -18,6 +34,7 @@ export function BundleList({ userBalance }: BundleListProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Fetch the available bundles from the API when the component mounts.
   useEffect(() => {
     fetch("/api/bundles")
       .then((res) => res.json())
@@ -56,6 +73,20 @@ export function BundleList({ userBalance }: BundleListProps) {
   );
 }
 
+/**
+ * BundleCard — individual bundle with a redeem button.
+ *
+ * Handles the two-step redemption flow:
+ * 1. POST /api/redeem → calls the simulated WiFi provider
+ * 2. POST /api/transactions → records the transaction and deducts balance
+ *
+ * Uses `useTransition` to keep the UI responsive during the ~1.5s API call.
+ * The `isPending` state disables the button to prevent duplicate submissions.
+ *
+ * Balance is tracked in local state for instant UI updates, and
+ * `router.refresh()` is called after success to re-run the parent
+ * Server Component (which re-fetches the balance from the database).
+ */
 function BundleCard({
   bundle,
   initialBalance,
@@ -77,6 +108,8 @@ function BundleCard({
     setToast(null);
     startTransition(async () => {
       try {
+        // Step 1: Call the simulated WiFi provider API.
+        // This may fail randomly (~20% failure rate) or succeed.
         const redeemRes = await fetch("/api/redeem", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -86,6 +119,7 @@ function BundleCard({
         const redeemData = await redeemRes.json();
 
         if (!redeemRes.ok || !redeemData.success) {
+          // Provider failed — show error, do NOT deduct balance or record transaction.
           setToast({
             type: "error",
             message: redeemData.message || "Redemption failed. Please try again.",
@@ -93,6 +127,8 @@ function BundleCard({
           return;
         }
 
+        // Step 2: Provider succeeded — now record the transaction and deduct balance.
+        // Only called when the WiFi provider confirms delivery.
         const txRes = await fetch("/api/transactions", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -115,12 +151,15 @@ function BundleCard({
           return;
         }
 
+        // Success — update local balance and refresh server components.
         const txResult = await txRes.json();
         setBalance(txResult.balance);
         setToast({
           type: "success",
           message: `${bundle.name} redeemed successfully!`,
         });
+        // Re-run the parent Server Component to reflect the new balance
+        // from the database (ensures consistency even if local state is stale).
         router.refresh();
       } catch {
         setToast({
