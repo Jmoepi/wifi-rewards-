@@ -1,15 +1,3 @@
-/**
- * Transaction History page — displays all past successful bundle redemptions.
- *
- * This is a Server Component that queries the database directly.
- * It fetches transactions for the authenticated user, ordered by most
- * recent first, and renders them in a table.
- *
- * No client-side interactivity is needed here (no pagination/filtering
- * required per the assessment), so keeping this as a Server Component
- * means zero JavaScript is shipped for this page.
- */
-
 import { verifySession } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
 

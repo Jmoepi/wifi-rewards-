@@ -1,20 +1,3 @@
-/**
- * Login page — Client Component for the authentication form.
- *
- * Why "use client"? This page uses:
- * - `useActionState` (React 19 hook) to manage form state and display
- *   validation/server errors inline without page reloads
- * - Interactive form inputs that need client-side event handling
- *
- * The actual authentication logic runs on the server via the `login` server
- * action — only the form UI is rendered on the client.
- *
- * `useActionState` returns [state, action, pending]:
- * - state: the return value from the server action (errors or undefined)
- * - action: a wrapped version of the server action to pass to <form action>
- * - pending: boolean indicating if the action is currently running
- */
-
 "use client";
 
 import { useActionState } from "react";
@@ -79,7 +62,6 @@ export default function LoginPage() {
               )}
             </div>
 
-            {/* General error message (e.g. "Invalid email or password") */}
             {state?.message && (
               <div className="rounded-md bg-red-50 p-3 text-sm text-red-700">
                 {state.message}

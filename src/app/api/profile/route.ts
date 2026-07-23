@@ -1,11 +1,3 @@
-/**
- * GET /api/profile — Returns the authenticated user's profile data.
- *
- * Used by client components that need to display or refresh user info
- * (e.g. after a balance update). The passwordHash is excluded from
- * the response for security.
- */
-
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";

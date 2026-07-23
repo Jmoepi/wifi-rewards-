@@ -1,23 +1,3 @@
-/**
- * BalanceAdmin — Client Component for the Admin/Test Controls section.
- *
- * Why "use client"? This component needs:
- * - `useState` for the input value, current balance, and toast notifications
- * - `useTransition` to handle the PATCH request without blocking the UI
- * - `useRouter` to refresh server components after the balance update
- *
- * This is a testing utility that lets users manually set their SB balance
- * via the PATCH /api/profile/balance endpoint. It exists because all new
- * users start with 0 SB and there's no "earn rewards" flow in this
- * assessment — without this, the redemption flow would be untestable.
- *
- * Flow:
- * 1. User enters a number in the input field
- * 2. Client-side validation ensures it's a valid positive integer
- * 3. PATCH request updates the balance in the database
- * 4. Local state and router.refresh() update the UI immediately
- */
-
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -41,7 +21,6 @@ export function BalanceAdmin({ currentBalance }: BalanceAdminProps) {
     setToast(null);
     const parsed = parseInt(inputValue, 10);
 
-    // Client-side validation: must be a valid positive integer.
     if (isNaN(parsed) || parsed < 0) {
       setToast({ type: "error", message: "Please enter a valid positive number." });
       return;
@@ -57,7 +36,6 @@ export function BalanceAdmin({ currentBalance }: BalanceAdminProps) {
 
         if (!res.ok) {
           const data = await res.json();
-          // Handle both string errors and Zod validation error objects.
           const errorMsg =
             typeof data.error === "object"
               ? Object.values(data.error).flat().join(", ")
@@ -66,8 +44,6 @@ export function BalanceAdmin({ currentBalance }: BalanceAdminProps) {
           return;
         }
 
-        // Update local state for immediate UI feedback, clear the input,
-        // and refresh server components (dashboard balance display).
         const updated = await res.json();
         setBalance(updated.sbBalance);
         setInputValue("");

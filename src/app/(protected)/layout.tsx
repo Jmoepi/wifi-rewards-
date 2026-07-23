@@ -1,19 +1,3 @@
-/**
- * Protected layout — wraps all authenticated pages (dashboard, history).
- *
- * This is a Server Component that renders the shared navigation bar.
- * The (protected) route group means this layout applies to all routes
- * under this folder WITHOUT adding "/protected" to the URL path.
- *
- * The logout button uses a form with the `logout` server action directly —
- * no client-side JavaScript needed for the logout flow. This is the
- * React Server Actions pattern: a <form> with `action={serverFunction}`.
- *
- * Route protection is handled by proxy.ts (which redirects unauthenticated
- * users away from /dashboard and /history), so this layout doesn't need
- * to check authentication itself.
- */
-
 import { logout } from "@/lib/actions/auth";
 
 export default function ProtectedLayout({
@@ -41,8 +25,6 @@ export default function ProtectedLayout({
             >
               History
             </a>
-            {/* Logout uses a form action — the server action deletes the
-                session cookie and redirects to /login. */}
             <form action={logout}>
               <button
                 type="submit"

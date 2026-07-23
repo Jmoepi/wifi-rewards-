@@ -1,13 +1,3 @@
-/**
- * Registration page — Client Component for creating a new account.
- *
- * Uses the same `useActionState` + server action pattern as the login page.
- * The `register` server action handles validation, duplicate email checks,
- * password hashing, user creation, and session establishment.
- *
- * See login/page.tsx for detailed explanation of the useActionState pattern.
- */
-
 "use client";
 
 import { useActionState } from "react";
